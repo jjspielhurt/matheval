@@ -21,12 +21,15 @@ int prioritate(char o[5])
     }
     return -1;
 }
-void prelucrare(int nrVal, char v1,char v2,char fct[100])
+void prelucrare(int nrVal, char v1,char v2,char fct[100],double val1,double val2)
 {
 
-
 }
-//citirea datelor de la tastatura
+/*citirea datelor de la tastatura
+nrVal -numarul de variabile (1 sau 2)
+v1,v2-numele variabilelor
+val1,val2-valorile variabilelor v1,v2
+*/
 int citire()
 {
     char v1,v2,fct[100];
@@ -42,7 +45,14 @@ cin>>v2;
 cout<<"Dati functia:";
 cin.get();
 cin.get(fct,100);
-prelucrare(nrVal,v1,v2,fct);
+double val1,val2;
+cout<<"Dati valoare pentru "<<v1<<":";
+cin>>val1;
+if(nrVal==2)
+{cout<<"Dati valoare pentru "<<v2<<":";
+cin>>val2;
+}
+prelucrare(nrVal,v1,v2,fct,val1,val2);
 }
 
 int main()
