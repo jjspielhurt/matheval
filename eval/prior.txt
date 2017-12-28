@@ -1,6 +1,6 @@
 0 ( )
 1 + -
-2 * /
+2 * / mod
 3 ^
 4 # = < >
-5 cos sin tg ctg ln exp abs floor sqrt exp min max
+5 cos sin tan cot asin acos atan acot ln abs floor ceil sqrt exp min max
