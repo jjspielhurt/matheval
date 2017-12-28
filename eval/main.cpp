@@ -45,14 +45,25 @@ cin>>v2;
 cout<<"Dati functia:";
 cin.get();
 cin.get(fct,100);
-double val1,val2;
-cout<<"Dati valoare pentru "<<v1<<":";
-cin>>val1;
+float val1,val2, val3, val4;
+cout<<"Dati intervalul de valori pentru "<<v1<<". Introduceti doua valori pentru interval: ";
+cin>>val1>>val2;
 if(nrVal==2)
-{cout<<"Dati valoare pentru "<<v2<<":";
-cin>>val2;
+{cout<<"Dati intervalul de valori pentru "<<v2<<". Introduceti doua valori pentru interval: ";
+cin>>val3>>val4;
 }
-prelucrare(nrVal,v1,v2,fct,val1,val2);
+int nr_puncte;
+cout<<"Dati numarul de puncte: ";
+cin>>nr_puncte;
+
+float precizie1, precizie2,i,j;
+
+precizie1=(val2-val2)/nr_puncte;
+precizie2=(val3-val1)/nr_puncte;
+
+for(i=val1; i<=val2; i+=precizie1)
+ for(j=val3; j<=val4; j+=precizie2)
+     prelucrare(nrVal,v1,v2,fct,i,j);
 }
 
 int main()
