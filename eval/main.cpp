@@ -4,7 +4,7 @@
 #include <string.h>
 using namespace std;
 ifstream p("prior.txt");
-//returneaza prioritatea operatorului op utilizand fisierul p
+//returneaza prioritatea operatorului o utilizand fisierul p
 int prioritate(char o[5])
 {
     bool ok;
