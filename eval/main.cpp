@@ -31,7 +31,9 @@ int prioritate(char o[10])
 }
 
 float aplicOper(float termen1,float termen2,char o[10])
-{ //operatori binari
+{
+    if(strcmp(o,"(")==0||strcmp(o,")")==0) return termen1;
+    //operatori binari
     if(strcmp(o,"+")==0) return termen1+termen2;
     if(strcmp(o,"-")==0) return termen1-termen2;
     if(strcmp(o,"*")==0) return termen1*termen2;
@@ -72,15 +74,20 @@ float aplicOper(float termen1,float termen2,char o[10])
     if(strcmp(o,"ceil")==0) return ceil(termen1);
     if(strcmp(o,"round")==0) return round(termen1);
     if(strcmp(o,"exp")==0) return exp(termen1);
+
 }
 //aplica operatorul din varful stivei de operatori pe operanzi
 void aplicaOpTop()
 { float rez;
     tipOperator=2;
-              if(topOpd>0) rez=aplicOper(opd[topOpd],opd[topOpd-1],opr[topOpr].c);
+              if(topOpd>1) rez=aplicOper(opd[topOpd],opd[topOpd-1],opr[topOpr].c);
               else{rez=aplicOper(opd[topOpd],0,opr[topOpr].c);
-                   if(tipOperator==2) cout<<"Expresie gresita.Operatorul de pe pozitia "<<i<<" necesita mai multe variabile sau constante";
-                   return; }
+                   if(tipOperator==2) {
+                        cout<<"Expresie gresita.Operatorul de pe pozitia "<<i<<" necesita mai multe variabile sau constante";
+                    topOpd=0;
+                    return ;
+                    }
+                  }
 
                    topOpd--;
                    topOpr--;
@@ -107,9 +114,10 @@ char o[10];
            if(fct[i]==')')
             { while(strcmp(opr[topOpr].c,"(")!=0)
                 aplicaOpTop();
+                topOpr--;
             }
        //verificam daca e operand si adaugam in stiva opd valorile pt operanzi
-       if(fct[i]==v1)
+       else if(fct[i]==v1)
        {topOpd++;
            opd[topOpd]=val1;
        }
@@ -117,12 +125,12 @@ char o[10];
        {    topOpd++;
            opd[topOpd]=val2;
        }
+       //verificam daca e numar si adougam valoarea in stiva de operanzi
        else if(fct[i]>='0'&&fct[i]<='9')
        {
             topOpd++;
            opd[topOpd]=fct[i]-48;
        }
-
        //daca e operator updatam stiva op
        else
        { //verificam daca avem operator de tip sin,cos,sqrt,tg,etc.
@@ -131,9 +139,9 @@ char o[10];
             if(fct[i]>='a'&&fct[i]<='z')
            {
                ok=1;
-               i++;
+
                while(ok==1&&i<lung)
-               {
+               {i++;
                 if(fct[i]>='a'&&fct[i]<='z')
                     {
                     o[j]=fct[i];
@@ -141,11 +149,13 @@ char o[10];
                     }
                 else ok=0;
                }
+               i--;
            }
            o[j]=NULL;
             //in o stocam valoarea operatorului curent
-           if(prioritate(o)>prioritate(opr[topOpr].c))
+           if(prioritate(o)>prioritate(opr[topOpr].c)||strcmp(o,"(")==0)
            { //daca prioritatea operatorului curent > proritatea operatorului din varful stivei atunci il putem adauga in stiva
+            //la fel si daca avem deschidere de paranteza
                topOpr++;
                strcpy(opr[topOpr].c,o);
 
@@ -201,17 +211,29 @@ cin>>nr_puncte;
 float precizie1, precizie2,i,j;
 
 precizie1=(val2-val1)/nr_puncte;
-precizie2=(val4-val3)/nr_puncte;
 int k=1;
-for(i=val1; i<val2; i+=precizie1)
- for(j=val3; j<val4; j+=precizie2)
-     {cout<<k<<". f("<<i<<","<<j<<") = "<<prelucrare(nrVal,v1,v2,fct,i,j)<<endl;
-     k++;
+if(nrVal==1)
+     {
+         for(i=val1; i<val2; i+=precizie1)
+         {cout<<k<<". f("<<i<<") = "<<prelucrare(nrVal,v1,v2,fct,i,0)<<endl;
+            k++;
+         }
      }
+    else
+    {
+        precizie2=(val4-val3)/nr_puncte;
+        j=val3;
+        for(i=val1; i<val2; i+=precizie1,j+=precizie2)
+                {cout<<k<<". f("<<i<<","<<j<<") = "<<prelucrare(nrVal,v1,v2,fct,i,j)<<endl;
+                k++;
+                }
+
+    }
 }
 
 int main()
 {
+
 citire();
 
     return 0;
