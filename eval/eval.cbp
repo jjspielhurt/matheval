@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -31,8 +33,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add directory="C:/Users/e530c/matheval/eval/" />
 		</Compiler>
 		<Unit filename="main.cpp" />
+		<Unit filename="operatii.cpp" />
+		<Unit filename="operatii.h">
+			<Option compile="1" />
+		</Unit>
+		<Unit filename="src/Opp.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

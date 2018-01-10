@@ -5,9 +5,30 @@
 	<fstream>
 	<string.h>
 
-1514457479 source:c:\users\e530c\matheval\eval\main.cpp
+1515613234 source:c:\users\e530c\matheval\eval\main.cpp
 	<iostream>
 	<cmath>
 	<fstream>
 	<string.h>
+	"operatii.h"
+	<stdlib.h>
+
+1515426500 source:c:\users\e530c\matheval\eval\operatii.c
+	"operatii.h"
+
+1515606331 c:\users\e530c\matheval\eval\operatii.h
+	<cmath>
+
+1515427196 source:c:\users\e530c\matheval\eval\src\opp.cpp
+	"Opp.h"
+
+1515427196 c:\users\e530c\matheval\eval\include\opp.h
+
+1515606331 source:c:\users\e530c\matheval\eval\operatii.h
+	<cmath>
+
+1515612820 source:c:\users\e530c\matheval\eval\operatii.cpp
+	"operatii.h"
+	<cmath>
+	<algorithm>
 
