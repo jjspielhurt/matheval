@@ -30,22 +30,18 @@ int prioritate(char o[10],int i)
         p.getline(s,100);
         q=strstr(s,o);
         if(q!=NULL && *(q-1)==' ' && *(q+strlen(o))==' ' )
-        {
             return int(s[0]-48);
-
-        }
     }
 
-
-        cout<<"Eroare de sintaxa: "<<o<<" de pe pozitia "<<i-strlen(o)+1<<" nu reprezinta un operand sau un operator.";
-        exit(0);
-
+    cout<<"Eroare de sintaxa: "<<o<<" de pe pozitia "<<i-strlen(o)+1<<" nu reprezinta un operand sau un operator.";
+    exit(0);
 
 }
 
 float aplicOper(float termen1,float termen2,char o[10])
 {
     if(strcmp(o,"(")==0||strcmp(o,")")==0) return termen1;
+
     //operatori binari
     if(strcmp(o,"+")==0) return adunare(termen1,termen2);
     if(strcmp(o,"-")==0) return diferenta(termen1,termen2);
@@ -85,39 +81,46 @@ float aplicOper(float termen1,float termen2,char o[10])
     if(strcmp(o,"round")==0) return round(termen1);
     if(strcmp(o,"exp")==0) return exponentiala(termen1);
 
-
-
 }
 //aplica operatorul din varful stivei de operatori pe operanzi
 
 void aplicaOpTop(int i)
-{ float rez;
+{
+    float rez;
     tipOperator=2;
-              if(topOpd>1) rez=aplicOper(opd[topOpd-1],opd[topOpd],opr[topOpr].c);
-              else{rez=aplicOper(opd[topOpd],0,opr[topOpr].c);
-                   if(tipOperator==2)
-                    {
-                        if(opr[topOpr].c[0]!='(')
-                        {
-                            cout<<"Expresie gresita. Operatorul de pe pozitia "<<i-1<<" necesita mai multe variabile/constante";
-                            exit(0);
-                        }
-                        if (topOpr!=0 && opr[topOpr].c[0]=='(')
-                        {
-                            cout<<"Expresie gresita. Este nevoie de mai multe paranteze.";
-                            exit(0);
-                        }
 
-                    }
+    if(topOpd>1)
+        rez=aplicOper(opd[topOpd-1],opd[topOpd],opr[topOpr].c);
+
+    else
+    {
+        rez=aplicOper(opd[topOpd],0,opr[topOpr].c);
+
+        if(tipOperator==2)
+        {
+            if(opr[topOpr].c[0]!='(')
+            {
+                cout<<"Expresie gresita. Operatorul de pe pozitia "<<i-1<<" necesita mai multe variabile/constante";
+                exit(0);
+            }
+
+            if (topOpr!=0 && opr[topOpr].c[0]=='(')
+            {
+                cout<<"Expresie gresita. Este nevoie de mai multe paranteze.";
+                exit(0);
+            }
+
+        }
 
 
-                  }
+    }
 
-                   topOpd--;
-                   topOpr--;
-            if(tipOperator==2) topOpd--;
-              topOpd++;
-              opd[topOpd]=rez;
+    topOpd--;
+    topOpr--;
+    if(tipOperator==2)
+        topOpd--;
+    topOpd++;
+    opd[topOpd]=rez;
 }
 
 /* opr stiva operatorilor cu topOpr
@@ -147,109 +150,118 @@ float prelucrare(int nrVal, char v1[25],char v2[25],char fct[100],float val1,flo
     do
     {
        while(i<lung&&topOpr>=0)
-       { //verificam daca este inchidere de paranteza
+       {
+           //verificam daca este inchidere de paranteza
            if(fct[i]==')')
-            { while(strcmp(opr[topOpr].c,"(")!=0)
-                aplicaOpTop(i);
-                topOpr--;
-                if(topOpr<0)
-                {
+           {
+               while(strcmp(opr[topOpr].c,"(")!=0)
+               aplicaOpTop(i);
+               topOpr--;
+               if(topOpr<0)
+               {
                     cout<<"Expresie gresita. Sunt mai multe paranteze inchise decat deschise, prima pe pozitia "<<i;
                     exit(0);
-                }
+               }
             }
-       //verificam daca e operand si adaugam in stiva opd valorile pt operanzi
-       else if(comp(v1,fct,i))
-       {
-           topOpd++;
-           opd[topOpd]=val1;
-       }
-       else if(nrVal==2&& comp(v2,fct,i))
-       {    topOpd++;
-           opd[topOpd]=val2;
-       }
-       //verificam daca e numar si adougam valoarea in stiva de operanzi
-       else if(fct[i]>='0'&&fct[i]<='9')
-       {
-            topOpd++;
-            float num=0,num2=0,pow=1;
-            while (fct[i]>='0'&& fct[i]<='9' && i<lung)
+            //verificam daca e operand si adaugam in stiva opd valorile pt operanzi
+            else if(comp(v1,fct,i))
             {
-                num=num*10+fct[i]-'0';
-                i++;
+                topOpd++;
+                opd[topOpd]=val1;
             }
-            if(fct[i]=='.')
+            else if(nrVal==2&& comp(v2,fct,i))
             {
-                i++;
+                topOpd++;
+                opd[topOpd]=val2;
+            }
+            //verificam daca e numar si adougam valoarea in stiva de operanzi
+            else if(fct[i]>='0'&&fct[i]<='9')
+            {
+                topOpd++;
+                float num=0,num2=0,pow=1;
                 while (fct[i]>='0'&& fct[i]<='9' && i<lung)
                 {
-                    num2=num2*10+fct[i]-'0';
+                    num=num*10+fct[i]-'0';
                     i++;
-                    pow*=10;
-
                 }
-                num=num+num2/pow;
+                if(fct[i]=='.')
+                {
+                    i++;
+                    while (fct[i]>='0'&& fct[i]<='9' && i<lung)
+                    {
+                        num2=num2*10+fct[i]-'0';
+                        i++;
+                        pow*=10;
+
+                    }
+                    num=num+num2/pow;
+                }
+
+                i--;
+                opd[topOpd]=num;
+            }
+            //daca e operator updatam stiva op
+            else
+            {
+                //verificam daca avem operator de tip sin,cos,sqrt,tg,etc.
+                o[0]=fct[i];
+
+                //verificam daca intalnim numar cu semn
+                if((o[0]=='+' || o[0]=='-') && (fct[i-1]=='(' || i==0))
+                    opd[++topOpd]=0;
+
+                j=1;
+
+                if(fct[i]>='a'&&fct[i]<='z')
+                {
+                    ok=1;
+
+                    while(ok==1&&i<lung)
+                    {
+                        i++;
+                        if(fct[i]>='a'&&fct[i]<='z')
+                        {
+                            o[j]=fct[i];
+                            j++;
+                        }
+                        else ok=0;
+                    }
+                    i--;
+                }
+
+                o[j]=NULL;
+
+                if(o[0]!=' ')
+                {
+                    //in o stocam valoarea operatorului curent
+                    if(prioritate(o,i)>prioritate(opr[topOpr].c,i)||strcmp(o,"(")==0)
+                    {
+                        //daca prioritatea operatorului curent > proritatea operatorului din varful stivei atunci il putem adauga in stiva
+                        //la fel si daca avem deschidere de paranteza
+                        topOpr++;
+                        strcpy(opr[topOpr].c,o);
+
+                    }
+                    else
+                    {
+                        //altfel trebuie aplicat operatorul din varful stivei
+                        while(prioritate(o,i)<=prioritate(opr[topOpr].c,i)&&topOpr>0)
+                        aplicaOpTop(i);
+                        topOpr++;
+                        strcpy(opr[topOpr].c,o);
+                    }
+                }
             }
 
-            i--;
-           opd[topOpd]=num;
-       }
-       //daca e operator updatam stiva op
-       else
-       { //verificam daca avem operator de tip sin,cos,sqrt,tg,etc.
-        o[0]=fct[i];
+            i++;
+        }
+        aplicaOpTop(i);
+        if(fct[0]=='(') topOpd++;
+    } while(topOpr>0);
 
-        //verificam daca intalnim numar cu semn
-        if((o[0]=='+' || o[0]=='-') && (fct[i-1]=='(' || i==0))
-            opd[++topOpd]=0;
-
-
-        j=1;
-            if(fct[i]>='a'&&fct[i]<='z')
-           {
-               ok=1;
-
-               while(ok==1&&i<lung)
-               {i++;
-                if(fct[i]>='a'&&fct[i]<='z')
-                    {
-                    o[j]=fct[i];
-                    j++;
-                    }
-                else ok=0;
-               }
-               i--;
-           }
-           o[j]=NULL;
-
-           if(o[0]!=' ')
-           {
-            //in o stocam valoarea operatorului curent
-           if(prioritate(o,i)>prioritate(opr[topOpr].c,i)||strcmp(o,"(")==0)
-           { //daca prioritatea operatorului curent > proritatea operatorului din varful stivei atunci il putem adauga in stiva
-            //la fel si daca avem deschidere de paranteza
-               topOpr++;
-               strcpy(opr[topOpr].c,o);
-
-           }
-           else
-           { //altfel trebuie aplicat operatorul din varful stivei
-               while(prioritate(o,i)<=prioritate(opr[topOpr].c,i)&&topOpr>0)
-                    aplicaOpTop(i);
-                topOpr++;
-                strcpy(opr[topOpr].c,o);
-           }
-           }
-       }
-       i++;
-       }
-       aplicaOpTop(i);
-       if(fct[0]=='(') topOpd++;
-   }
-   while(topOpr>0);
-   if(opd[topOpd]>inf) opd[topOpd]=inf;
-   if(opd[topOpd]<-inf) opd[topOpd]=-inf;
-   return opd[topOpd];
+    if(opd[topOpd]>inf) opd[topOpd]=inf;
+    if(opd[topOpd]<-inf) opd[topOpd]=-inf;
+    return opd[topOpd];
 
 
 }
