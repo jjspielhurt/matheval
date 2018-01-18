@@ -2,5 +2,5 @@
 1 + - -
 2 * / mod mod
 3 ^ ^
-4 # = < > >
+4 # = < > <= >= >
 5 cos sin tan cot asin acos atan acot ln abs floor ceil sqrt exp min max max

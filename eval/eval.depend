@@ -1,9 +1,11 @@
 # depslib dependency file v1.0
-1514554867 source:c:\users\silviu\matheval\eval\main.cpp
-	<iostream>
-	<cmath>
-	<fstream>
-	<string.h>
+1516281131 source:c:\users\silviu\matheval\eval\main.cpp
+	"iostream"
+	"cmath"
+	"fstream"
+	"string.h"
+	"operatii.h"
+	"stdlib.h"
 
 1515613234 source:c:\users\e530c\matheval\eval\main.cpp
 	<iostream>
@@ -31,4 +33,20 @@
 	"operatii.h"
 	<cmath>
 	<algorithm>
+
+1515615082 c:\users\silviu\matheval\eval\operatii.h
+	<cmath>
+
+1515615082 source:c:\users\silviu\matheval\eval\operatii.cpp
+	"operatii.h"
+	<cmath>
+	<algorithm>
+
+1515615082 source:c:\users\silviu\matheval\eval\operatii.h
+	<cmath>
+
+1515615082 source:c:\users\silviu\matheval\eval\src\opp.cpp
+	"Opp.h"
+
+1515615082 c:\users\silviu\matheval\eval\include\opp.h
 

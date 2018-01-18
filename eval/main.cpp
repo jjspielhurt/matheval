@@ -1,9 +1,9 @@
-#include <iostream>
-#include <cmath>
-#include <fstream>
-#include <string.h>
+#include "iostream"
+#include "cmath"
+#include "fstream"
+#include "string.h"
 #include "operatii.h"
-#include <stdlib.h>
+#include "stdlib.h"
 
 
 using namespace std;
@@ -18,8 +18,6 @@ char c[10]; }opr[100];
 //returneaza prioritatea operatorului o utilizand fisierul p
 
 
-
-
 int prioritate(char o[10],int i)
 {
     char s[100],*q;
@@ -32,7 +30,6 @@ int prioritate(char o[10],int i)
         if(q!=NULL && *(q-1)==' ' && *(q+strlen(o))==' ' )
             return int(s[0]-48);
     }
-
     cout<<"Eroare de sintaxa: "<<o<<" de pe pozitia "<<i-strlen(o)+1<<" nu reprezinta un operand sau un operator.";
     exit(0);
 
@@ -50,6 +47,8 @@ float aplicOper(float termen1,float termen2,char o[10])
     if(strcmp(o,"mod")==0) return int(termen1)%int(termen2);
     if(strcmp(o,"=")==0) return termen1==termen2;
     if(strcmp(o,"#")==0) return !(termen1==termen2);
+    if(strcmp(o,">=")==0) return termen1>=termen2;
+    if(strcmp(o,"<=")==0) return termen1<=termen2;
     if(strcmp(o,">")==0) return termen1>termen2;
     if(strcmp(o,"<")==0) return termen1<termen2;
     if(strcmp(o,"and")==0) return termen1&&termen2;
@@ -63,23 +62,23 @@ float aplicOper(float termen1,float termen2,char o[10])
 
     //operatori unari
     tipOperator=1;
-    if(strcmp(o,"sin")==0) return sin(termen1);
-    if(strcmp(o,"cos")==0) return cos(termen1);
-    if(strcmp(o,"tan")==0) return tangenta(termen1);
-    if(strcmp(o,"cot")==0) return cotangenta(termen1);
+    if(strcmp(o,"sin")==0) return sin(termen2);
+    if(strcmp(o,"cos")==0) return cos(termen2);
+    if(strcmp(o,"tan")==0) return tangenta(termen2);
+    if(strcmp(o,"cot")==0) return cotangenta(termen2);
 
-    if(strcmp(o,"asin")==0) return arcsin(termen1);
-    if(strcmp(o,"acos")==0) return arccos(termen1);
-    if(strcmp(o,"atan")==0) return atan(termen1);
-    if(strcmp(o,"acot")==0) return PI/2-atan(termen1);
+    if(strcmp(o,"asin")==0) return arcsin(termen2);
+    if(strcmp(o,"acos")==0) return arccos(termen2);
+    if(strcmp(o,"atan")==0) return atan(termen2);
+    if(strcmp(o,"acot")==0) return PI/2-atan(termen2);
 
-    if(strcmp(o,"ln")==0) return logaritm(termen1);
-    if(strcmp(o,"sqrt")==0) return radical(termen1);
-    if(strcmp(o,"abs")==0) return abs(termen1);
-    if(strcmp(o,"floor")==0) return floor(termen1);
-    if(strcmp(o,"ceil")==0) return ceil(termen1);
-    if(strcmp(o,"round")==0) return round(termen1);
-    if(strcmp(o,"exp")==0) return exponentiala(termen1);
+    if(strcmp(o,"ln")==0) return logaritm(termen2);
+    if(strcmp(o,"sqrt")==0) return radical(termen2);
+    if(strcmp(o,"abs")==0) return abs(termen2);
+    if(strcmp(o,"floor")==0) return floor(termen2);
+    if(strcmp(o,"ceil")==0) return ceil(termen2);
+    if(strcmp(o,"round")==0) return round(termen2);
+    if(strcmp(o,"exp")==0) return exponentiala(termen2);
 
 }
 //aplica operatorul din varful stivei de operatori pe operanzi
@@ -94,7 +93,7 @@ void aplicaOpTop(int i)
 
     else
     {
-        rez=aplicOper(opd[topOpd],0,opr[topOpr].c);
+        rez=aplicOper(0,opd[topOpd],opr[topOpr].c);
 
         if(tipOperator==2)
         {
@@ -104,14 +103,13 @@ void aplicaOpTop(int i)
                 exit(0);
             }
 
-            if (topOpr!=0 && opr[topOpr].c[0]=='(')
+            if (opr[topOpr].c[0]=='(')
             {
                 cout<<"Expresie gresita. Este nevoie de mai multe paranteze.";
                 exit(0);
             }
 
         }
-
 
     }
 
@@ -140,28 +138,49 @@ bool comp(char v[25],char fun[100], int &i)
 
 float prelucrare(int nrVal, char v1[25],char v2[25],char fct[100],float val1,float val2)
 {
-    int i,j;
+    int i,j,par[100],topPar=-1;
     char o[10];
     lung=strlen(fct);
     strcpy(opr[0].c,"(");
     topOpd=0;
     topOpr=0;
     i=0;
+
+
+
     do
     {
        while(i<lung&&topOpr>=0)
-       {
+       { //adaugam in stiva cu paranteze daca este cazul
+                if(i!=lung-1)
+                {
+                    if(fct[i]=='(')
+                    {
+                        topPar++;
+                        par[topPar]=i;
+
+                    }
+                    else
+                    {
+                        if(fct[i]==')')
+                        topPar--;
+                        if(topPar<-1)
+                        {
+                            cout<<"Eroare de sintaxa.Sunt mai multe paranteze inchise decat deschise, prima in plus fiind pe pozitia "<<i;
+                            exit(0);
+                        }
+
+                    }
+                }
+
+
            //verificam daca este inchidere de paranteza
            if(fct[i]==')')
            {
                while(strcmp(opr[topOpr].c,"(")!=0)
                aplicaOpTop(i);
                topOpr--;
-               if(topOpr<0)
-               {
-                    cout<<"Expresie gresita. Sunt mai multe paranteze inchise decat deschise, prima pe pozitia "<<i;
-                    exit(0);
-               }
+
             }
             //verificam daca e operand si adaugam in stiva opd valorile pt operanzi
             else if(comp(v1,fct,i))
@@ -228,6 +247,12 @@ float prelucrare(int nrVal, char v1[25],char v2[25],char fct[100],float val1,flo
                     }
                     i--;
                 }
+                if((fct[i]=='>'||fct[i]=='<')&&fct[i+1]=='='&&i+1<lung)
+                {
+                    o[j]='=';
+                    i++;
+                    j++;
+                }
 
                 o[j]=NULL;
 
@@ -255,10 +280,15 @@ float prelucrare(int nrVal, char v1[25],char v2[25],char fct[100],float val1,flo
 
             i++;
         }
-        aplicaOpTop(i);
-        if(fct[0]=='(') topOpd++;
+        if(topOpr>0) aplicaOpTop(i);
+
     } while(topOpr>0);
 
+    if(topPar>-1)
+    {
+        cout<<"Eroare de sintaxa.Sunt mai multe paranteze deschise decat inchise, ultima in plus fiind pe pozitia "<<par[topPar];
+        exit(0);
+    }
     if(opd[topOpd]>inf) opd[topOpd]=inf;
     if(opd[topOpd]<-inf) opd[topOpd]=-inf;
     return opd[topOpd];
@@ -406,8 +436,11 @@ sol eval_citire()
 
 
     float precizie1, precizie2,i,j;
-
-
+    int lung;
+    lung=strlen(fct);
+    fct[lung]=')';
+    lung++;
+    fct[lung]='\0';
 
 
     vec.fun[0]=nr_puncte;
@@ -432,6 +465,7 @@ sol eval_citire()
 
         for(k=1, i=val1,j=val3; k<=nr_puncte; i+=precizie1,j+=precizie2,k++)
         {
+
              vec.fun[k]=prelucrare(nrVal,v1,v2,fct,i,j);
              cout<<k<<". f("<<i<<","<<j<<") = "<<vec.fun[k]<<endl;
              topOpr=0;
